@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  username    String   @unique
+  password    String
+  first_name  String
+  last_name   String
+  email       String
+  phone       String
+  is_delete   Boolean  @default(false)
+  
+  // FK to Role with role_id
+  role_id    String
+  role       Role     @relation(fields: [role_id], references: [id])
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  description String?
+  
+  // virtual field for relation with User
+  users       User[]
+  // virtual field for relation with RolePermission
+  role_permissions RolePermission[] 
+  
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  
+  // virtual field for relation with RolePermission
+  role_permissions RolePermission[] 
+  
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model RolePermission {
+  role_id       String
+  permission_id String
+
+  role          Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission    Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  // combine role_id and permission_id to be Primary Key with 
+  @@id([role_id, permission_id])
+  
+  // table name
+  @@map("Role_Permission") 
+}

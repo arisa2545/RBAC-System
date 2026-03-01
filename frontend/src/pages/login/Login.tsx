@@ -7,6 +7,8 @@ import type {
 } from "@/interface/login.interface";
 import { useLogin } from "@/services/auth.service";
 import { useNavigate } from "@tanstack/react-router";
+import { TriangleAlert } from "lucide-react";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 const Login = () => {
@@ -16,6 +18,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILoginFormValues>();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { mutateAsync: loginMutate, isPending: isLoginPending } = useLogin({
     onSuccess: (response) => {
@@ -23,6 +26,11 @@ const Login = () => {
       navigate({
         to: "/dashboard",
       });
+    },
+    onError: (error) => {
+      if (error.response?.status === 401) {
+        setErrorMessage("Username and Password Mismatch, Please Try Again");
+      }
     },
   });
 
@@ -41,6 +49,11 @@ const Login = () => {
           Login
         </h1>
 
+        {errorMessage && (
+          <div className="flex items-center border rounded-xl p-2 px-6 gap-2 bg-red-200 border-red-700 text-red-700">
+            <TriangleAlert size={20} /> {errorMessage}
+          </div>
+        )}
         <div className="bg-[#c8d9e5] flex flex-col gap-4 p-20 rounded-2xl w-130">
           <div className="w-full flex flex-col gap-2">
             <p className="font-semibold">Username *</p>

@@ -50,12 +50,12 @@ export default function Navbar() {
             </Link>
           )}
           {hasPermission(PermissionEnum.VIEW_USER) && (
-            <Link to="/" className={navigateItemClassName}>
+            <Link to="/users" className={navigateItemClassName}>
               USER
             </Link>
           )}
           {hasPermission(PermissionEnum.VIEW_ROLE_PERMISSION) && (
-            <Link to="/" className={navigateItemClassName}>
+            <Link to="/role-permissions" className={navigateItemClassName}>
               ROLE & PERMISSION
             </Link>
           )}

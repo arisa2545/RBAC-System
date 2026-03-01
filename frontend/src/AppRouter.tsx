@@ -66,10 +66,22 @@ const dashboardRoute = createRoute({
   component: Dashboard,
 });
 
+const userRoute = createRoute({
+  getParentRoute: () => protectedLayout,
+  path: "/users",
+  component: () => <>User List ....</>,
+});
+
+const rolePermissionRoute = createRoute({
+  getParentRoute: () => protectedLayout,
+  path: "/role-permissions",
+  component: () => <>User List ....</>,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   publicLayout.addChildren([loginRoute]),
-  protectedLayout.addChildren([dashboardRoute]),
+  protectedLayout.addChildren([dashboardRoute, userRoute, rolePermissionRoute]),
 ]);
 
 export const router = createRouter({ routeTree });

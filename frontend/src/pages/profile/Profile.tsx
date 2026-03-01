@@ -3,11 +3,29 @@ import { Button } from "@/components/ui/button";
 import { PermissionEnum } from "@/enum/permission";
 import usePermission from "@/hooks/usePermission";
 import { useGetProfile } from "@/services/profile.service";
+import { useDeleteUser } from "@/services/user.service";
+import { useNavigate } from "@tanstack/react-router";
 import { CircleUserRound } from "lucide-react";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { data: profile } = useGetProfile();
   const { hasPermission } = usePermission();
+
+  const { mutateAsync: deleteUserMutate } = useDeleteUser({
+    onSuccess: () => handleLogout(),
+  });
+
+  const handleDeleteAccount = async () => {
+    if (!profile) return;
+    await deleteUserMutate({ userId: profile?.id });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("profile");
+    navigate({ to: "/login" });
+  };
 
   return (
     <div className="flex flex-col h-screen items-center mt-12">
@@ -47,9 +65,17 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
-          <Button className="bg-red-700 hover:bg-red-600 cursor-pointer" disabled={!hasPermission(PermissionEnum.CAN_DELETE)}>
+        <div className="flex justify-end gap-3">
+          <Button
+            variant={"outline"}
+            className="border-red-700 text-red-700 hover:bg-red-700 hover:text-white cursor-pointer"
+            disabled={!hasPermission(PermissionEnum.CAN_DELETE)}
+            onClick={handleDeleteAccount}
+          >
             Delete My Account
+          </Button>
+          <Button className="bg-red-700 hover:bg-red-800 cursor-pointer" onClick={handleLogout}>
+            Logout
           </Button>
         </div>
       </div>

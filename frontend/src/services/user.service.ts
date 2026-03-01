@@ -1,5 +1,12 @@
-import type { ICustomMutationOptions, IErrorResponse } from "@/interface/tanstack.interface";
-import type { IGetAllUserResponse, IGetUserDetailResponse } from "@/interface/user.interface";
+import type {
+  ICustomMutationOptions,
+  IErrorResponse,
+} from "@/interface/tanstack.interface";
+import type {
+  IGetAllUserResponse,
+  IGetUserDetailResponse,
+} from "@/interface/user.interface";
+import { useCustomMutation } from "@/lib/api";
 import api from "@/lib/axios";
 import type { UpdateUserFormData } from "@/pages/user/EditUserInfo";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -10,25 +17,31 @@ export interface IUpdateUserVariables {
   payload: UpdateUserFormData;
 }
 
+export interface IDeleteUserVariables {
+  userId: string;
+}
+
 export const useGetAllUser = () => {
   return useQuery({
-    queryKey: ['userList'],
+    queryKey: ["userList"],
     queryFn: async () => {
       const response = await api.get<Array<IGetAllUserResponse>>(`/users`);
       return response.data;
     },
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 };
 
 export const useGetUserDetails = (userId: string) => {
   return useQuery({
-    queryKey: ['userDetails', userId],
+    queryKey: ["userDetails", userId],
     queryFn: async () => {
-      const response = await api.get<IGetUserDetailResponse>(`/users/${userId}`);
+      const response = await api.get<IGetUserDetailResponse>(
+        `/users/${userId}`,
+      );
       return response.data;
     },
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 };
 
@@ -44,12 +57,29 @@ export const useUpdateUserInfo = (
     AxiosError<IErrorResponse>,
     IUpdateUserVariables
   >({
-    mutationKey: ['updateRolePermission'],
+    mutationKey: ["updateRolePermission"],
     mutationFn: async ({ userId, payload }) => {
       const { data } = await api.patch<IGetUserDetailResponse>(
         `/users/${userId}`,
         payload,
       );
+      return data;
+    },
+    ...options,
+  });
+};
+
+export const useDeleteUser = (
+  options?: ICustomMutationOptions<
+    null,
+    AxiosError<IErrorResponse>,
+    IDeleteUserVariables
+  >,
+) => {
+  return useCustomMutation<null, AxiosError<IErrorResponse>, IDeleteUserVariables>({
+    mutationKey: ["deleteUser"],
+    mutationFn: async ({ userId }) => {
+      const { data } = await api.delete<null>(`/users/${userId}`);
       return data;
     },
     ...options,

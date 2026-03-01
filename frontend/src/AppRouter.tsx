@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import Login from "./pages/login/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
+import Navbar from "./components/layout/Navbar";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -35,7 +36,12 @@ const protectedLayout = createRoute({
       throw redirect({ to: "/login" });
     }
   },
-  component: () => <Outlet />,
+  component: () => (
+    <div className="min-h-screen">
+      <Navbar />
+      <div><Outlet /></div>
+    </div>
+  ),
 });
 
 const indexRoute = createRoute({

@@ -1,10 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useRoleWithPermission } from "@/services/role.service";
+import { useNavigate } from "@tanstack/react-router";
 import { SquarePen } from "lucide-react";
 
 const RolePermissionList = () => {
   const { data: roleList = [] } = useRoleWithPermission();
+  const navigate = useNavigate();
+  const handleRedirectEditPage = (roleId: string) => {
+    navigate({ to: `/role-permissions/edit/${roleId}` });
+  };
 
   return (
     <div className="flex flex-col h-screen items-center mt-12">
@@ -29,7 +34,13 @@ const RolePermissionList = () => {
                     })}
                   </div>
                 </div>
-                <Button size='xs' className="bg-[#577c8e] hover:bg-[#2f4157]">Edit Permissions <SquarePen /></Button>
+                <Button
+                  size="xs"
+                  className="bg-[#577c8e] hover:bg-[#2f4157]"
+                  onClick={() => handleRedirectEditPage(role.id)}
+                >
+                  Edit Permissions <SquarePen />
+                </Button>
               </div>
             );
           })}

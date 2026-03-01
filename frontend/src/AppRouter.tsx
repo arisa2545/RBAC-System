@@ -10,6 +10,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Navbar from "./components/layout/Navbar";
 import UserList from "./pages/user/UserList";
 import RolePermissionList from "./pages/rolePermissions/RolePermissionList";
+import EditRolePermission from "./pages/rolePermissions/EditRolePermission";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -80,10 +81,16 @@ const rolePermissionRoute = createRoute({
   component: RolePermissionList,
 });
 
+const editRolePermissionRoute = createRoute({
+  getParentRoute: () => protectedLayout,
+  path: '/role-permissions/edit/$id',
+  component: EditRolePermission,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   publicLayout.addChildren([loginRoute]),
-  protectedLayout.addChildren([dashboardRoute, userRoute, rolePermissionRoute]),
+  protectedLayout.addChildren([dashboardRoute, userRoute, rolePermissionRoute, editRolePermissionRoute]),
 ]);
 
 export const router = createRouter({ routeTree });

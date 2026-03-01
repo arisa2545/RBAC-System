@@ -15,3 +15,7 @@ export interface IGetAllRoleResponse {
   name: string;
   description: string | null;
 }
+
+export interface IUpdateRolePermissionPayload {
+  permission_id_list: Array<string>;
+}

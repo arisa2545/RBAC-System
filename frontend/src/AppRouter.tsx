@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Navbar from "./components/layout/Navbar";
 import UserList from "./pages/user/UserList";
+import RolePermissionList from "./pages/rolePermissions/RolePermissionList";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -76,7 +77,7 @@ const userRoute = createRoute({
 const rolePermissionRoute = createRoute({
   getParentRoute: () => protectedLayout,
   path: "/role-permissions",
-  component: () => <>User List ....</>,
+  component: RolePermissionList,
 });
 
 const routeTree = rootRoute.addChildren([

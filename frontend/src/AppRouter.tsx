@@ -16,6 +16,28 @@ const rootRoute = createRootRoute({
   ),
 });
 
+const publicLayout = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "_public",
+  beforeLoad: () => {
+    if (localStorage.getItem("access_token")) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
+  component: () => <Outlet />,
+});
+
+const protectedLayout = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "_protected",
+  beforeLoad: () => {
+    if (!localStorage.getItem("access_token")) {
+      throw redirect({ to: "/login" });
+    }
+  },
+  component: () => <Outlet />,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
@@ -27,18 +49,22 @@ const indexRoute = createRoute({
 });
 
 const loginRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => publicLayout,
   path: "/login",
   component: Login,
 });
 
-const dashBoardRoute = createRoute({
-  getParentRoute: () => rootRoute,
+const dashboardRoute = createRoute({
+  getParentRoute: () => protectedLayout,
   path: "/dashboard",
   component: Dashboard,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, loginRoute, dashBoardRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  publicLayout.addChildren([loginRoute]),
+  protectedLayout.addChildren([dashboardRoute]),
+]);
 
 export const router = createRouter({ routeTree });
 

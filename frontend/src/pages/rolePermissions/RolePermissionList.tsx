@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PermissionEnum } from "@/enum/permission";
+import usePermission from "@/hooks/usePermission";
 import { useRoleWithPermission } from "@/services/role.service";
 import { useNavigate } from "@tanstack/react-router";
 import { SquarePen } from "lucide-react";
@@ -7,6 +9,7 @@ import { SquarePen } from "lucide-react";
 const RolePermissionList = () => {
   const { data: roleList = [] } = useRoleWithPermission();
   const navigate = useNavigate();
+  const { hasPermission } = usePermission()
   const handleRedirectEditPage = (roleId: string) => {
     navigate({ to: `/role-permissions/edit/${roleId}` });
   };
@@ -38,6 +41,7 @@ const RolePermissionList = () => {
                   size="xs"
                   className="bg-[#577c8e] hover:bg-[#2f4157]"
                   onClick={() => handleRedirectEditPage(role.id)}
+                  disabled={!hasPermission(PermissionEnum.MANAGE_ROLE_PERMISSION)}
                 >
                   Edit Permissions <SquarePen />
                 </Button>

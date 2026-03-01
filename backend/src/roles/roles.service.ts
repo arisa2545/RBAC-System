@@ -1,11 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetRoleWithPermissionResponse } from './interface/role.interface';
+import {
+  GetAllRoleResponse,
+  GetRoleWithPermissionResponse,
+} from './interface/role.interface';
 import { UpdateRolePermissionsDto } from './dto/role.dto';
 
 @Injectable()
 export class RolesService {
   constructor(private prisma: PrismaService) {}
+
+  async getAllRole(): Promise<Array<GetAllRoleResponse>> {
+    const masterRole = await this.prisma.role.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+      },
+    });
+    return masterRole;
+  }
 
   async getAllRoleWithPermission(): Promise<
     Array<GetRoleWithPermissionResponse>

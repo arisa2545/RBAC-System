@@ -9,3 +9,9 @@ export interface RolePermissionResponse {
   id: string;
   name: string;
 }
+
+export interface GetAllRoleResponse {
+  id: string;
+  name: string;
+  description: string | null;
+}

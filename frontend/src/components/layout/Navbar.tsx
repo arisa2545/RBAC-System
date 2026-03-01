@@ -5,15 +5,18 @@ import { Badge } from "../ui/badge";
 import { Spinner } from "../ui/spinner";
 import { useGetProfile } from "@/services/profile.service";
 import { useEffect } from "react";
+import usePermission from "@/hooks/usePermission";
+import { PermissionEnum } from "@/enum/permission";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { hasPermission } = usePermission();
   const navigateItemClassName =
     "text-xs font-medium text-[#577c8e] hover:text-zinc-900 [&.active]:font-bold [&.active]:text-[#2f4157] [&.active]:underline";
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    localStorage.removeItem("profile")
+    localStorage.removeItem("profile");
     navigate({ to: "/login" });
   };
 
@@ -21,7 +24,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (profile) {
-      localStorage.setItem('profile', JSON.stringify(profile));
+      localStorage.setItem("profile", JSON.stringify(profile));
     }
   }, [profile]);
 
@@ -41,15 +44,21 @@ export default function Navbar() {
         </h1>
 
         <div className="flex gap-6 mt-0.5">
-          <Link to="/dashboard" className={navigateItemClassName}>
-            HOME
-          </Link>
-          <Link to="/" className={navigateItemClassName}>
-            USER
-          </Link>
-          <Link to="/" className={navigateItemClassName}>
-            ROLE & PERMISSION
-          </Link>
+          {hasPermission(PermissionEnum.VIEW_DASHBOARD) && (
+            <Link to="/dashboard" className={navigateItemClassName}>
+              HOME
+            </Link>
+          )}
+          {hasPermission(PermissionEnum.VIEW_USER) && (
+            <Link to="/" className={navigateItemClassName}>
+              USER
+            </Link>
+          )}
+          {hasPermission(PermissionEnum.VIEW_ROLE_PERMISSION) && (
+            <Link to="/" className={navigateItemClassName}>
+              ROLE & PERMISSION
+            </Link>
+          )}
         </div>
       </div>
 
@@ -57,8 +66,12 @@ export default function Navbar() {
         <div className="flex gap-2 items-center font-medium text-[#2f4157]">
           <CircleUserRound size={36} absoluteStrokeWidth={true} />
           <div className="flex flex-col">
-            <p className="text-sm">{profile?.first_name} {profile?.last_name}</p>
-           <Badge variant="secondary" className="text-[9px] text-[#577c8e]">{profile?.role}</Badge>
+            <p className="text-sm">
+              {profile?.first_name} {profile?.last_name}
+            </p>
+            <Badge variant="secondary" className="text-[9px] text-[#577c8e]">
+              {profile?.role}
+            </Badge>
           </div>
         </div>
         <Button onClick={handleLogout} variant="outline" size="sm">

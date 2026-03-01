@@ -1,3 +1,5 @@
+import type { PermissionEnum } from "@/enum/permission";
+
 export interface IProfileResponse {
   id: string;
   username: string;
@@ -6,7 +8,7 @@ export interface IProfileResponse {
   email: string;
   phone: string;
   role: string;
-  permissions: Array<string>;
+  permissions: Array<PermissionEnum>;
   created_at: Date;
   updated_at: Date;
 }

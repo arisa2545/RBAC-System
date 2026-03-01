@@ -14,6 +14,7 @@ import EditRolePermission from "./pages/rolePermissions/EditRolePermission";
 import UserDetails from "./pages/user/UserDetails";
 import EditUserInfo from "./pages/user/EditUserInfo";
 import Profile from "./pages/profile/Profile";
+import GlobalAuthModal from "./components/GlobalAuthModal";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -44,6 +45,7 @@ const protectedLayout = createRoute({
   },
   component: () => (
     <div className="min-h-screen">
+      <GlobalAuthModal />
       <Navbar />
       <div>
         <Outlet />

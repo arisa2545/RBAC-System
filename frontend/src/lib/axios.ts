@@ -25,4 +25,21 @@ api.interceptors.request.use(
   },
 );
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const requestUrl = error.config?.url;
+    const isLoginPath = requestUrl?.includes('/login');
+    
+    if ((status === 401 && !isLoginPath) || status === 403) {
+      window.dispatchEvent(
+        new CustomEvent('auth-error', { detail: { status } })
+      );
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
 export default api;

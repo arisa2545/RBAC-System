@@ -71,10 +71,10 @@ export class RolesService {
         : []),
     ]);
 
-    return this.getRoleWithPermissions(roleId);
+    return this.getRoleDetails(roleId);
   }
 
-  async getRoleWithPermissions(roleId: string) {
+  async getRoleDetails(roleId: string): Promise<GetRoleWithPermissionResponse> {
     const role = await this.prisma.role.findUnique({
       where: { id: roleId },
       include: {
@@ -84,15 +84,19 @@ export class RolesService {
       },
     });
 
-    if (!role) return null;
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
 
-    return {
+    const response: GetRoleWithPermissionResponse = {
       id: role.id,
       name: role.name,
-      permissions: role.role_permissions.map((rp) => ({
+      description: role.description ?? '',
+      permission: role.role_permissions.map((rp) => ({
         id: rp.permission.id,
         name: rp.permission.name,
       })),
     };
+    return response;
   }
 }

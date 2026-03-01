@@ -17,18 +17,18 @@ export class RolesController {
     return await this.rolesService.getAllRole();
   }
 
-  @Get(':id')
-  async getRoleDetails(
-    @Param('id') roleId: string,
-  ): Promise<GetRoleWithPermissionResponse> {
-    return await this.rolesService.getRoleDetails(roleId);
-  }
-
   @Get('permissions')
   async getAllRoleWithPermission(): Promise<
     Array<GetRoleWithPermissionResponse>
   > {
     return await this.rolesService.getAllRoleWithPermission();
+  }
+
+  @Get(':id')
+  async getRoleDetails(
+    @Param('id') roleId: string,
+  ): Promise<GetRoleWithPermissionResponse> {
+    return await this.rolesService.getRoleDetails(roleId);
   }
 
   @Put(':id/permissions')

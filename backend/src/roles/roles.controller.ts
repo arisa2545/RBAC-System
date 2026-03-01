@@ -17,7 +17,7 @@ export class RolesController {
     return await this.rolesService.getAllRole();
   }
 
-  @Get(':id/permissions')
+  @Get('permissions')
   async getAllRoleWithPermission(): Promise<
     Array<GetRoleWithPermissionResponse>
   > {

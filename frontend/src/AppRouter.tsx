@@ -6,6 +6,7 @@ import {
   redirect,
 } from "@tanstack/react-router";
 import Login from "./pages/login/Login";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -31,7 +32,13 @@ const loginRoute = createRoute({
   component: Login,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, loginRoute]);
+const dashBoardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/dashboard",
+  component: Dashboard,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, loginRoute, dashBoardRoute]);
 
 export const router = createRouter({ routeTree });
 

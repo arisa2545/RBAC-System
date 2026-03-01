@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ILoginFormValues } from "@/interface/login.interface";
+import { Spinner } from "@/components/ui/spinner";
+import type {
+  ILoginFormValues,
+  ILoginPayload,
+} from "@/interface/login.interface";
+import { useLogin } from "@/services/auth.service";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 const Login = () => {
@@ -9,10 +15,23 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginFormValues>();
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<ILoginFormValues> = (data) => {
-    console.log("Username:", data.username);
-    console.log("Password:", data.password);
+  const { mutateAsync: loginMutate, isPending: isLoginPending } = useLogin({
+    onSuccess: (response) => {
+      localStorage.setItem("access_token", response.access_token);
+      navigate({
+        to: "/dashboard",
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<ILoginFormValues> = async (data) => {
+    const payload: ILoginPayload = {
+      username: data.username,
+      password: data.password,
+    };
+    await loginMutate(payload);
   };
 
   return (
@@ -24,39 +43,48 @@ const Login = () => {
 
         <div className="bg-[#c8d9e5] flex flex-col gap-4 p-20 rounded-2xl w-130">
           <div className="w-full flex flex-col gap-2">
-            <p className="font-semibold">Username</p>
-            <Input
-              id="username"
-              type="text"
-              placeholder="Please enter username"
-              {...register("username", { required: "Username required" })}
-            />
-            {errors.username && (
-              <p className="text-sm text-red-700">
-                {errors.username.message as string}
-              </p>
-            )}
+            <p className="font-semibold">Username *</p>
+            <div>
+              <Input
+                id="username"
+                type="text"
+                placeholder="Please enter username"
+                {...register("username", { required: "Username required" })}
+                className="bg-white"
+              />
+              {errors.username && (
+                <p className="text-xs mt-1 text-red-700">
+                  {errors.username.message as string}
+                </p>
+              )}
+            </div>
           </div>
           <div className="w-full flex flex-col gap-2">
-            <p className="font-semibold">Password</p>
-            <Input
-              id="password"
-              type="text"
-              placeholder="Please enter password"
-              {...register("password", { required: "Password required" })}
-            />
+            <p className="font-semibold">Password *</p>
+            <div>
+              <Input
+                id="password"
+                type="text"
+                placeholder="Please enter password"
+                {...register("password", { required: "Password required" })}
+                className="bg-white"
+              />
+              {errors.password && (
+                <p className="text-xs mt-1 text-red-700">
+                  {errors.password.message as string}
+                </p>
+              )}
+            </div>
           </div>
-          {errors.password && (
-            <p className="text-sm text-red-700">
-              {errors.password.message as string}
-            </p>
-          )}
         </div>
         <Button
+          type="submit"
           variant="outline"
           size="lg"
-          className="hover:bg-[#577c8e] hover:text-white font-extrabold border-2"
+          className="hover:bg-[#2f4157] hover:text-white font-extrabold border-2"
+          disabled={isLoginPending}
         >
+          {isLoginPending && <Spinner data-icon="inline-start" />}
           Confirm
         </Button>
       </div>

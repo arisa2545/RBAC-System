@@ -51,6 +51,7 @@ export class UsersService {
       last_name: user.last_name,
       email: user.email,
       phone: user.phone,
+      role_id: user.role_id,
       role: user.role.name,
       created_at: user.created_at,
       updated_at: user.updated_at,

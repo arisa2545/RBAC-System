@@ -1,4 +1,4 @@
-import type { IGetRoleWithPermissionResponse, IUpdateRolePermissionPayload } from "@/interface/role.interface";
+import type { IGetAllRoleResponse, IGetRoleWithPermissionResponse, IUpdateRolePermissionPayload } from "@/interface/role.interface";
 import type { ICustomMutationOptions, IErrorResponse } from "@/interface/tanstack.interface";
 import api from "@/lib/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -8,6 +8,17 @@ export interface IUpdateRolePermissionVariables {
   roleId: string;
   payload: IUpdateRolePermissionPayload;
 }
+
+export const useGetAllRole = () => {
+  return useQuery({
+    queryKey: ['getAllRole'],
+    queryFn: async () => {
+      const response = await api.get<Array<IGetAllRoleResponse>>(`/roles`);
+      return response.data;
+    },
+    staleTime: Infinity
+  });
+};
 
 export const useRoleWithPermission = () => {
   return useQuery({

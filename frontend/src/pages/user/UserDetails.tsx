@@ -25,9 +25,14 @@ const UserDetails = () => {
     <div className="mx-auto p-6 mt-10 w-200">
       <p className="text-4xl font-extrabold mb-4">User Details</p>
       <div className="flex flex-col gap-2 border rounded-xl p-6">
-        <p className="text-2xl font-bold">
-          {userDetails?.first_name} {userDetails?.last_name}
-        </p>
+        <div className="flex text-lg gap-2">
+          <p className="font-semibold">First Name: </p>
+          <p>{userDetails?.first_name}</p>
+        </div>
+        <div className="flex text-lg gap-2">
+          <p className="font-semibold">Last Name: </p>
+          <p>{userDetails?.last_name}</p>
+        </div>
         <div className="flex text-lg gap-2">
           <p className="font-semibold">Role: </p>
           <p>{userDetails?.role}</p>
@@ -44,18 +49,6 @@ const UserDetails = () => {
           <p className="font-semibold">Phone: </p>
           <p>{userDetails?.phone}</p>
         </div>
-        <div className="flex text-lg gap-2">
-          <p className="font-semibold">Created At: </p>
-          <p>
-            {userDetails?.created_at ? userDetails?.created_at.toLocaleString() : ""}
-          </p>
-        </div>
-        <div className="flex text-lg gap-2">
-          <p className="font-semibold">Latest Updated: </p>
-          <p>
-            {userDetails?.updated_at ? userDetails?.updated_at.toLocaleString() : "-"}
-          </p>
-        </div>
       </div>
       <div className="mt-8 flex justify-center gap-4 pt-2">
         <Button
@@ -66,7 +59,7 @@ const UserDetails = () => {
           Back
         </Button>
         <Button
-          onClick={() => navigate({ to: "/users" })}
+          onClick={() => navigate({ to: `/users/edit/${userDetails?.id}` })}
           className="w-30 bg-[#2f4157] cursor-pointer"
           disabled={!hasPermission(PermissionEnum.EDIT_USER_INFO)}
         >

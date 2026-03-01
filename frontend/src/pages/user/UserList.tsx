@@ -46,6 +46,7 @@ const UserList = () => {
                     size="xs"
                     className="bg-[#577c8e] hover:bg-[#2f4157] cursor-pointer"
                     disabled={!hasPermission(PermissionEnum.EDIT_USER_INFO)}
+                    onClick={() => navigator({to: `/users/edit/${user.id}`})}
                   >
                     <div className="flex items-center gap-1 px-1">
                       Edit

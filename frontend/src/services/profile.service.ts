@@ -9,5 +9,6 @@ export const useGetProfile = () => {
       const response = await api.get<IProfileResponse>(`/auth/profile`);
       return response.data;
     },
+    staleTime: Infinity,
   });
 };

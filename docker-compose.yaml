@@ -33,5 +33,14 @@ services:
         condition: service_healthy
     command: sh -c "npx prisma migrate deploy && npx prisma db seed && npm run start:dev"
 
+  frontend:
+    container_name: rbac-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5010:80"
+    restart: unless-stopped
+
 volumes:
   mysql_data:

@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { PermissionEnum } from "@/enum/permission";
 import usePermission from "@/hooks/usePermission";
 import { useGetAllUser } from "@/services/user.service";
+import { useNavigate } from "@tanstack/react-router";
 import { Notebook, SquarePen } from "lucide-react";
 
 const UserList = () => {
   const { data: userList = [] } = useGetAllUser();
+  const navigator = useNavigate();
   const { hasPermission } = usePermission();
 
   return (
@@ -33,6 +35,7 @@ const UserList = () => {
                     size="xs"
                     className="bg-[#577c8e] hover:bg-[#2f4157] cursor-pointer"
                     disabled={!hasPermission(PermissionEnum.VIEW_USER)}
+                    onClick={() => navigator({to: `/users/details/${user.id}`})}
                   >
                     <div className="flex items-center gap-1 px-1">
                       Details

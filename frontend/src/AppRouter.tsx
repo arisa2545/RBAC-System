@@ -11,6 +11,7 @@ import Navbar from "./components/layout/Navbar";
 import UserList from "./pages/user/UserList";
 import RolePermissionList from "./pages/rolePermissions/RolePermissionList";
 import EditRolePermission from "./pages/rolePermissions/EditRolePermission";
+import UserDetails from "./pages/user/UserDetails";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -42,7 +43,9 @@ const protectedLayout = createRoute({
   component: () => (
     <div className="min-h-screen">
       <Navbar />
-      <div><Outlet /></div>
+      <div>
+        <Outlet />
+      </div>
     </div>
   ),
 });
@@ -75,6 +78,12 @@ const userRoute = createRoute({
   component: UserList,
 });
 
+const userDetailsRoute = createRoute({
+  getParentRoute: () => protectedLayout,
+  path: "/users/details/$id",
+  component: UserDetails,
+});
+
 const rolePermissionRoute = createRoute({
   getParentRoute: () => protectedLayout,
   path: "/role-permissions",
@@ -83,14 +92,20 @@ const rolePermissionRoute = createRoute({
 
 const editRolePermissionRoute = createRoute({
   getParentRoute: () => protectedLayout,
-  path: '/role-permissions/edit/$id',
+  path: "/role-permissions/edit/$id",
   component: EditRolePermission,
 });
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
   publicLayout.addChildren([loginRoute]),
-  protectedLayout.addChildren([dashboardRoute, userRoute, rolePermissionRoute, editRolePermissionRoute]),
+  protectedLayout.addChildren([
+    dashboardRoute,
+    userRoute,
+    rolePermissionRoute,
+    editRolePermissionRoute,
+    userDetailsRoute,
+  ]),
 ]);
 
 export const router = createRouter({ routeTree });

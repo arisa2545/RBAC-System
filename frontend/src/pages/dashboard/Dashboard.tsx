@@ -1,8 +1,17 @@
+import { useGetProfile } from "@/services/profile.service";
+import { useEffect } from "react";
+
 const Dashboard = () => {
+  const { data: profile } = useGetProfile();
+  useEffect(() => {
+    if (!profile) return;
+    localStorage.setItem('profile', JSON.stringify(profile))
+  }, [profile])
+
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <div className="flex flex-col gap-4">
-        <p className="text-5xl font-extrabold">Welcome, Arisa A.</p>
+        <p className="text-5xl font-extrabold">Welcome, {profile?.first_name} {profile?.last_name} </p>
         <div className="flex gap-4">
           <div className="border w-fit rounded-xl p-6 text-center">
             <p>Total User</p>

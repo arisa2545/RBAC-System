@@ -76,4 +76,26 @@ export class UsersService {
     });
     return updatedUser;
   }
+
+  async softDeleteUser(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, is_delete: false },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        is_delete: true,
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: 'Delete user successful',
+    };
+  }
 }

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
   GetUserDetailResponse,
@@ -26,5 +35,10 @@ export class UsersController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateData: UpdateUserDto) {
     return this.usersService.updateUser(id, updateData);
+  }
+
+  @Delete(':id')
+  async removeUser(@Param('id', ParseUUIDPipe) userId: string) {
+    return this.usersService.softDeleteUser(userId);
   }
 }

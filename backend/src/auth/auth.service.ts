@@ -1,8 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginRequestDto } from './dto/login.dto';
 import { LoginResponse } from './interface/login.interface';
+import { ProfileResponse } from './interface/profile.interface';
 
 @Injectable()
 export class AuthService {
@@ -43,5 +48,40 @@ export class AuthService {
         role: user.role.name,
       },
     };
+  }
+
+  async getProfile(userId: string): Promise<ProfileResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, is_delete: false },
+      include: {
+        role: {
+          include: {
+            role_permissions: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const response: ProfileResponse = {
+      id: user.id,
+      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role.name,
+      permissions: user.role.role_permissions.map((rp) => rp.permission.name),
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
+    return response;
   }
 }

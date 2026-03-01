@@ -63,7 +63,7 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="flex gap-2 items-center font-medium text-[#2f4157]">
+        <div className="flex gap-2 items-center font-medium text-[#2f4157] cursor-pointer" onClick={() => navigate({ to: "/profile" })}>
           <CircleUserRound size={36} absoluteStrokeWidth={true} />
           <div className="flex flex-col">
             <p className="text-sm">

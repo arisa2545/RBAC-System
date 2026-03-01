@@ -13,6 +13,7 @@ import RolePermissionList from "./pages/rolePermissions/RolePermissionList";
 import EditRolePermission from "./pages/rolePermissions/EditRolePermission";
 import UserDetails from "./pages/user/UserDetails";
 import EditUserInfo from "./pages/user/EditUserInfo";
+import Profile from "./pages/profile/Profile";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -103,6 +104,12 @@ const editRolePermissionRoute = createRoute({
   component: EditRolePermission,
 });
 
+const profileRoute = createRoute({
+  getParentRoute: () => protectedLayout,
+  path: "profile",
+  component: Profile,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   publicLayout.addChildren([loginRoute]),
@@ -112,7 +119,8 @@ const routeTree = rootRoute.addChildren([
     rolePermissionRoute,
     editRolePermissionRoute,
     userDetailsRoute,
-    editUserRoute
+    editUserRoute,
+    profileRoute
   ]),
 ]);
 

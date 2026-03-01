@@ -1,12 +1,7 @@
 import { useGetProfile } from "@/services/profile.service";
-import { useEffect } from "react";
 
 const Dashboard = () => {
   const { data: profile } = useGetProfile();
-  useEffect(() => {
-    if (!profile) return;
-    localStorage.setItem('profile', JSON.stringify(profile))
-  }, [profile])
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">

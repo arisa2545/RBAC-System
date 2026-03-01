@@ -2,8 +2,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { CircleUserRound, LogOut } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import type { IProfileResponse } from "@/interface/profile.interface";
+import { Spinner } from "../ui/spinner";
+import { useGetProfile } from "@/services/profile.service";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -16,7 +17,21 @@ export default function Navbar() {
     navigate({ to: "/login" });
   };
 
-  const { data: profile } = useQuery<IProfileResponse>({ queryKey: ['profile'] });
+  const { data: profile, isLoading } = useGetProfile();
+
+  useEffect(() => {
+    if (profile) {
+      localStorage.setItem('profile', JSON.stringify(profile));
+    }
+  }, [profile]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full flex-col items-center justify-center bg-white">
+        <Spinner className="size-16" />
+      </div>
+    );
+  }
 
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between bg-[#c8d9e5] px-6 py-4 shadow-xs">

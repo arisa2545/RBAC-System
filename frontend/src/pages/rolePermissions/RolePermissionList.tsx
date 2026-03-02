@@ -39,7 +39,7 @@ const RolePermissionList = () => {
                 </div>
                 <Button
                   size="xs"
-                  className="bg-[#577c8e] hover:bg-[#2f4157]"
+                  className="bg-[#577c8e] hover:bg-[#2f4157] cursor-pointer"
                   onClick={() => handleRedirectEditPage(role.id)}
                   disabled={!hasPermission(PermissionEnum.MANAGE_ROLE_PERMISSION)}
                 >

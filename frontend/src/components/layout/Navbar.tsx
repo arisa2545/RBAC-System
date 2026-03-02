@@ -69,12 +69,12 @@ export default function Navbar() {
             <p className="text-sm">
               {profile?.first_name} {profile?.last_name}
             </p>
-            <Badge variant="secondary" className="text-[9px] text-[#577c8e]">
+            <Badge variant="secondary" className="text-[9px] text-[#577c8e] cursor-pointer">
               {profile?.role}
             </Badge>
           </div>
         </div>
-        <Button onClick={handleLogout} variant="outline" size="sm">
+        <Button onClick={handleLogout} variant="outline" size="sm" className="cursor-pointer">
           <LogOut />
         </Button>
       </div>

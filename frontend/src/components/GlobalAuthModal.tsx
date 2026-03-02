@@ -56,7 +56,7 @@ export default function GlobalAuthModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={handleClose}>
+          <AlertDialogAction onClick={handleClose} className='cursor-pointer'>
             {errorStatus === 401 
               ? 'Go to Login Page'
               : 'Go to Dashboard Page'}

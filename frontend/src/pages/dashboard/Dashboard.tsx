@@ -40,7 +40,7 @@ const Dashboard = () => {
           </div>
         )}
         {hasPermission(PermissionEnum.VIEW_USER) && (
-          <Button className="bg-[#577c8e] w-fit hover:bg-[#2f4157] rounded-3xl" onClick={handleRedirectToUser}>
+          <Button className="bg-[#577c8e] w-fit hover:bg-[#2f4157] rounded-3xl cursor-pointer" onClick={handleRedirectToUser}>
             <div className="flex gap-3 mx-6 items-center">
               VIEW ALL USER
               <SquareArrowOutUpRight />
@@ -48,7 +48,7 @@ const Dashboard = () => {
           </Button>
         )}
         {hasPermission(PermissionEnum.VIEW_ROLE_PERMISSION) && (
-          <Button className="bg-[#577c8e] w-fit hover:bg-[#2f4157] rounded-3xl" onClick={handleRedirectToRolePermission}>
+          <Button className="bg-[#577c8e] w-fit hover:bg-[#2f4157] rounded-3xl cursor-pointer" onClick={handleRedirectToRolePermission}>
             <div className="flex gap-3 mx-6 items-center">
               VIEW ALL ROLE & PERMISSION
               <SquareArrowOutUpRight />

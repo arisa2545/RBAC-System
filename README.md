@@ -10,15 +10,18 @@
 
 ### 2. ขั้นตอนการติดตั้ง
 1. **Clone Repository:**
+   
    ```bash
    git clone <ใส่-URL-ของ-Repo-ที่นี่>
    cd <ชื่อโฟลเดอร์โปรเจกต์>
 
-2. **Start service with Docker:**
+3. **Start service with Docker:**
+   
    ```bash
    docker-compose up -d
 
-3. **Access web with URL:**
+5. **Access web with URL:**
+   
    ```bash
    http://localhost:5010
 

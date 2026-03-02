@@ -1,25 +1,21 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PermissionEnum } from "@/enum/permission";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import usePermission from "@/hooks/usePermission";
 import { useGetProfile } from "@/services/profile.service";
-import { useDeleteUser } from "@/services/user.service";
 import { useNavigate } from "@tanstack/react-router";
 import { CircleUserRound } from "lucide-react";
+import DeleteAccountModal from "./components/DeleteAccountModal";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { data: profile } = useGetProfile();
   const { hasPermission } = usePermission();
-
-  const { mutateAsync: deleteUserMutate } = useDeleteUser({
-    onSuccess: () => handleLogout(),
-  });
-
-  const handleDeleteAccount = async () => {
-    if (!profile) return;
-    await deleteUserMutate({ userId: profile?.id });
-  };
+  const [
+    isDeleteAccountOpen,
+    { close: deleteAccountClose, open: deleteAccountOpen },
+  ] = useDisclosure();
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -70,15 +66,25 @@ const Profile = () => {
             variant={"outline"}
             className="border-red-700 text-red-700 hover:bg-red-700 hover:text-white cursor-pointer"
             disabled={!hasPermission(PermissionEnum.CAN_DELETE)}
-            onClick={handleDeleteAccount}
+            onClick={deleteAccountOpen}
           >
             Delete My Account
           </Button>
-          <Button className="bg-red-700 hover:bg-red-800 cursor-pointer" onClick={handleLogout}>
+          <Button
+            className="bg-red-700 hover:bg-red-800 cursor-pointer"
+            onClick={handleLogout}
+          >
             Logout
           </Button>
         </div>
       </div>
+      {isDeleteAccountOpen && (
+        <DeleteAccountModal
+          isOpen={isDeleteAccountOpen}
+          userId={profile?.id ?? ""}
+          onClose={deleteAccountClose}
+        />
+      )}
     </div>
   );
 };

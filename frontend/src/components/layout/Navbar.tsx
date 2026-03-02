@@ -7,6 +7,8 @@ import { useGetProfile } from "@/services/profile.service";
 import { useEffect } from "react";
 import usePermission from "@/hooks/usePermission";
 import { PermissionEnum } from "@/enum/permission";
+import { useDisclosure } from "@/hooks/useDisclosure";
+import ConfirmLogoutModal from "../ConfirmLogoutModal";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -14,11 +16,10 @@ export default function Navbar() {
   const navigateItemClassName =
     "text-xs font-medium text-[#577c8e] hover:text-zinc-900 [&.active]:font-bold [&.active]:text-[#2f4157] [&.active]:underline";
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("profile");
-    navigate({ to: "/login" });
-  };
+  const [
+    isConfirmLogoutOpen,
+    { close: closeConfirmLogout, open: openConfirmLogout },
+  ] = useDisclosure();
 
   const { data: profile, isLoading } = useGetProfile();
 
@@ -63,21 +64,38 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="flex gap-2 items-center font-medium text-[#2f4157] cursor-pointer" onClick={() => navigate({ to: "/profile" })}>
+        <div
+          className="flex gap-2 items-center font-medium text-[#2f4157] cursor-pointer"
+          onClick={() => navigate({ to: "/profile" })}
+        >
           <CircleUserRound size={36} absoluteStrokeWidth={true} />
           <div className="flex flex-col">
             <p className="text-sm">
               {profile?.first_name} {profile?.last_name}
             </p>
-            <Badge variant="secondary" className="text-[9px] text-[#577c8e] cursor-pointer">
+            <Badge
+              variant="secondary"
+              className="text-[9px] text-[#577c8e] cursor-pointer"
+            >
               {profile?.role}
             </Badge>
           </div>
         </div>
-        <Button onClick={handleLogout} variant="outline" size="sm" className="cursor-pointer">
+        <Button
+          onClick={openConfirmLogout}
+          variant="outline"
+          size="sm"
+          className="cursor-pointer"
+        >
           <LogOut />
         </Button>
       </div>
+      {isConfirmLogoutOpen && (
+        <ConfirmLogoutModal
+          isOpen={isConfirmLogoutOpen}
+          onClose={closeConfirmLogout}
+        />
+      )}
     </nav>
   );
 }

@@ -4,24 +4,22 @@ import { PermissionEnum } from "@/enum/permission";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import usePermission from "@/hooks/usePermission";
 import { useGetProfile } from "@/services/profile.service";
-import { useNavigate } from "@tanstack/react-router";
 import { CircleUserRound } from "lucide-react";
 import DeleteAccountModal from "./components/DeleteAccountModal";
+import ConfirmLogoutModal from "@/components/ConfirmLogoutModal";
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { data: profile } = useGetProfile();
   const { hasPermission } = usePermission();
   const [
     isDeleteAccountOpen,
-    { close: deleteAccountClose, open: deleteAccountOpen },
+    { close: closeDeleteAccount, open: openDeleteAccount },
   ] = useDisclosure();
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("profile");
-    navigate({ to: "/login" });
-  };
+  const [
+    isConfirmLogoutOpen,
+    { close: closeConfirmLogout, open: openConfirmLogout },
+  ] = useDisclosure();
 
   return (
     <div className="flex flex-col h-screen items-center mt-12">
@@ -66,13 +64,13 @@ const Profile = () => {
             variant={"outline"}
             className="border-red-700 text-red-700 hover:bg-red-700 hover:text-white cursor-pointer"
             disabled={!hasPermission(PermissionEnum.CAN_DELETE)}
-            onClick={deleteAccountOpen}
+            onClick={openDeleteAccount}
           >
             Delete My Account
           </Button>
           <Button
             className="bg-red-700 hover:bg-red-800 cursor-pointer"
-            onClick={handleLogout}
+            onClick={openConfirmLogout}
           >
             Logout
           </Button>
@@ -82,7 +80,13 @@ const Profile = () => {
         <DeleteAccountModal
           isOpen={isDeleteAccountOpen}
           userId={profile?.id ?? ""}
-          onClose={deleteAccountClose}
+          onClose={closeDeleteAccount}
+        />
+      )}
+      {isConfirmLogoutOpen && (
+        <ConfirmLogoutModal
+          isOpen={isConfirmLogoutOpen}
+          onClose={closeConfirmLogout}
         />
       )}
     </div>

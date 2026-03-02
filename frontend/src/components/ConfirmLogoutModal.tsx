@@ -8,25 +8,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useDeleteUser } from "@/services/user.service";
 
-export interface IDeleteAccountModalProps {
+export interface IConfirmLogoutModalProps {
   isOpen: boolean;
-  userId: string;
   onClose: () => void;
 }
 
-export default function DeleteAccountModal(props: IDeleteAccountModalProps) {
-  const { isOpen, onClose, userId } = props;
-
-  const { mutateAsync: deleteUserMutate } = useDeleteUser({
-    onSuccess: () => handleLogout(),
-  });
-
-  const handleDeleteAccount = async () => {
-    if (!userId.length) return;
-    await deleteUserMutate({ userId });
-  };
+export default function ConfirmLogoutModal(props: IConfirmLogoutModalProps) {
+  const { isOpen, onClose } = props;
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -41,10 +30,10 @@ export default function DeleteAccountModal(props: IDeleteAccountModalProps) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-red-700 font-extrabold">
-            Please confirm to delete your account!
+            Please confirm to logout!
           </AlertDialogTitle>
           <AlertDialogDescription>
-            เมื่อลบแล้วคุณจะไม่สามารถใช้งานบัญชีนี้ได้
+            กรุณายืนยันว่าคุณต้องการที่จะออกจากระบบ
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -52,7 +41,7 @@ export default function DeleteAccountModal(props: IDeleteAccountModalProps) {
             Cancel
           </AlertDialogAction>
           <AlertDialogAction
-            onClick={handleDeleteAccount}
+            onClick={handleLogout}
             className="cursor-pointer"
           >
             Confirm

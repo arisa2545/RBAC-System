@@ -77,7 +77,7 @@ const Login = () => {
             <div>
               <Input
                 id="password"
-                type="text"
+                type="password"
                 placeholder="Please enter password"
                 {...register("password", { required: "Password required" })}
                 className="bg-white"

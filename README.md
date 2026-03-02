@@ -12,8 +12,8 @@
 1. **Clone Repository:**
    
    ```bash
-   git clone <ใส่-URL-ของ-Repo-ที่นี่>
-   cd <ชื่อโฟลเดอร์โปรเจกต์>
+   git clone <repo-url>
+   cd <project-folder>
 
 3. **Start service with Docker:**
    
